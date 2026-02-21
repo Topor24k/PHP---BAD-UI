@@ -44,6 +44,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
         }
         
         body {
@@ -367,6 +369,44 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 console.log("Health Tip: " + tip);
             }
         }, 5000);
+        
+        // Disable right-click and copy
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('copy', e => e.preventDefault());
+        
+        // Annoying alerts
+        setTimeout(() => {
+            if(confirm("📊 BMI CALCULATOR TIPS 📊\n\nDid you know BMI doesn't account for:\n- Muscle mass\n- Bone density\n- Overall composition\n\nSo basically, The Rock is 'obese' by BMI.\n\nWant to calculate anyway?")) {
+                setTimeout(() => {
+                    alert("💡 PRO TIP 💡\n\nIf you don't like your BMI results, just:\n- Stand on one foot\n- Hold your breath\n- Believe in yourself\n\n(Or talk to an actual doctor)");
+                }, 5000);
+            }
+        }, 2000);
+        
+        // Random calculations that are wrong
+        setInterval(() => {
+            if(Math.random() < 0.1) {
+                alert("⚠️ SYSTEM UPDATE ⚠️\n\nRecalculating your BMI...\n\nJust kidding! We got it right the first time.\n\n(Probably)");
+            }
+        }, 15000);
+        
+        // Make submit button move
+        const calcBtn = document.querySelector('.calculate-btn');
+        let btnHoverCount = 0;
+        if(calcBtn) {
+            calcBtn.addEventListener('mouseenter', function() {
+                btnHoverCount++;
+                if(btnHoverCount < 3) {
+                    this.style.position = 'fixed';
+                    this.style.top = Math.random() * 70 + 'vh';
+                    this.style.left = Math.random() * 70 + 'vw';
+                    this.style.zIndex = '9999';
+                } else {
+                    this.style.position = 'relative';
+                    this.textContent = '✅ CALCULATE IT ALREADY!';
+                }
+            });
+        }
     </script>
 </body>
 </html>
