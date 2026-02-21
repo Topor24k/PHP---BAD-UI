@@ -59,6 +59,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mood'])) {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
         }
         
         body {
@@ -498,6 +500,21 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mood'])) {
                 console.log(affirmation);
             }
         }, 10000);
+        
+        // Disable right-click
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        
+        // Random mood check-ins
+        setInterval(() => {
+            if(Math.random() < 0.1) {
+                alert("💭 MOOD CHECK-IN 💭\n\nHow are you feeling right now?\n\nNo seriously, take a moment.\n\nDeep breath.\n\nYou got this.");
+            }
+        }, 25000);
+        
+        // Annoying positivity
+        setTimeout(() => {
+            alert("🌟 REMINDER 🌟\n\nYou're visiting a mental health page.\n\nThat means you care about your wellbeing.\n\nThat's actually pretty awesome.\n\nKeep it up!");
+        }, 3000);
     </script>
 </body>
 </html>
