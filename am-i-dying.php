@@ -473,7 +473,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         document.querySelectorAll('input[type="radio"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
                 if(e.target.value === 'severe' || e.target.value === 'unconscious' || e.target.value === 'none') {
-                    alert('⚠️ WARNING! ⚠️\n\nIf you actually selected this seriously, please CALL 911 immediately!\n\nThis website cannot help you with real emergencies!');
+                    alert('⚠️ CRITICAL WARNING! ⚠️\n\nIf this is real: STOP CLICKING THINGS AND DIAL 911.\n\nWe\'re a satirical website, not a miracle worker.\n\nEmergency services > Comedy health websites.');
                 }
             });
         });
@@ -482,7 +482,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             const pain = parseInt(document.getElementById('pain-slider').value);
             
             if(pain >= 9) {
-                if(!confirm('⚠️ PAIN LEVEL ' + pain + '/10! ⚠️\n\nIf this is real, you should be calling 911, not filling out forms!\n\nContinue anyway?')) {
+                if(!confirm('⚠️ PAIN LEVEL ' + pain + '/10! ⚠️\n\nAt this pain level, the only clicking you should do is speed-dial to 911.\n\nThis form cannot prescribe morphine or sympathy.\n\nStill want to continue this charade?')) {
                     e.preventDefault();
                 }
             }
@@ -490,7 +490,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         <?php if($triage): ?>
         setTimeout(() => {
-            alert('ASSESSMENT COMPLETE!\n\nRemember: This is satire!\n\nFor real health concerns, see a real doctor!');
+            alert('ASSESSMENT COMPLETE!\n\nYou just got medical advice from a website that uses Comic Sans.\n\nLet that sink in.\n\nNow go see an actual healthcare professional.');
         }, 500);
         <?php endif; ?>
     </script>

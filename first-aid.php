@@ -615,7 +615,7 @@ if(!isset($_SESSION['logged_in'])) {
         
         // Educational popup
         setTimeout(() => {
-            alert('EDUCATIONAL REMINDER\n\nThis guide provides basic information, but hands-on training is essential!\n\nConsider taking:\n• CPR/AED certification\n• First Aid course\n• Wilderness First Aid (for outdoor enthusiasts)\n\nOffered by American Red Cross or American Heart Association!');
+            alert('EDUCATIONAL REMINDER\n\nIn an emergency, knowing CPR from a website is like knowing karate from watching movies.\n\nIt might help, but you really want the real training.\n\nTake a certified course (American Red Cross / AHA).\n\nFirst aid knowledge can literally save lives.');
         }, 2000);
     </script>
 </body>

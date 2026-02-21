@@ -322,7 +322,7 @@ if(isset($_POST['action'])) {
         setInterval(createRandomPopup, 5000);
         
         function forgotPassword() {
-            alert("PASSWORD RECOVERY\n\nPlease contact support to reset your password.\n\nFor demo purposes, you can use any password to login.");
+            alert("PASSWORD RECOVERY\n\nYour password is probably 'password123' or your birthday.\n\nStatistically, you're as predictable as a horror movie victim.\n\n(But seriously, contact support or use any password for demo)");
         }
         
         function showSignup() {

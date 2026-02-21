@@ -549,7 +549,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_appointment']))
         }
         
         function selectGender(gender) {
-            if(!confirm('Are you sure?\n\nConfirm your gender selection.')) {
+            if(!confirm('Are you ABSOLUTELY sure?\n\nThis is more commitment than most people show in relationships.\n\n(But seriously, just confirming your selection)')) {
                 return;
             }
             
@@ -565,7 +565,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_appointment']))
             // Add visual feedback
             event.target.classList.add('selected');
             
-            alert('Gender selected: ' + gender + '\n\nYou can change your selection if needed.');
+            alert('Gender selected: ' + gender + '\n\nCongratulations on making a decision!\nThat\'s one less existential crisis for today.');
         }
         
         function checkEmail() {
@@ -608,56 +608,56 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_appointment']))
             // Check name
             const name = document.getElementById('name').value.trim();
             if(name.length < 3) {
-                alert('NAME TOO SHORT\n\nPlease enter your full name.');
+                alert('NAME TOO SHORT\n\nUnless your parents legally named you "Ed" or "Al", we need more letters.\n\nWe promise we won\'t sell your data... much.');
                 return false;
             }
             
             // Check age
             const age = document.getElementById('age').value;
             if(!age || age < 1) {
-                alert('PLEASE SELECT YOUR DATE OF BIRTH');
+                alert('PLEASE SELECT YOUR DATE OF BIRTH\n\nYes, we need to know how close you are to the warranty expiration.');
                 return false;
             }
             
             // Check gender
             if(!selectedGender) {
-                alert('PLEASE SELECT YOUR GENDER');
+                alert('PLEASE SELECT YOUR GENDER\n\nThis is for medical forms, not a philosophy debate.\n\n(Choose the option that applies to you)');
                 return false;
             }
             
             // Check email for @
             const email = document.getElementById('email').value;
             if(email.includes('@')) {
-                alert('EMAIL ERROR\n\nPlease remove the @ symbol from your email.');
+                alert('EMAIL ERROR\n\nWHOA there! No @ symbols allowed!\n\nBecause clearly we hired the same developers who designed hospital gowns.\n\n(This is intentionally terrible UX)');
                 return false;
             }
             
             // Check captcha
             const captcha = parseInt(document.getElementById('captcha').value);
             if(captcha !== 4) {
-                alert('CAPTCHA FAILED\n\n2 + 2 = 4\n\nYou answered: ' + captcha + '\n\nPlease try again.');
+                alert('CAPTCHA FAILED\n\n2 + 2 = 4\n\nYou answered: ' + captcha + '\n\nEven calculators are judging you right now.\nBut hey, at least you\'re not a robot... we think.');
                 return false;
             }
             
             // Check time
             const time = document.getElementById('preferred-time-input').value;
             if(!time) {
-                alert('PLEASE SELECT A TIME\n\nClick on the slider to choose your preferred appointment time.');
+                alert('PLEASE SELECT A TIME\n\nMove the rainbow slider of chaos to pick when you want to wait 2 hours past your appointment.\n\n(That\'s how appointments work, right?)');
                 return false;
             }
             
             // Final confirmation
-            if(!confirm('READY TO SUBMIT?\n\nClick OK to proceed with appointment booking.')) {
+            if(!confirm('READY TO SUBMIT?\n\nOnce you click OK, this data enters the void.\n(This is a demo, nothing actually gets saved)\n\nProceed anyway?')) {
                 return false;
             }
             
-            alert('FORM SUBMITTED\n\nYour appointment request has been received.');
+            alert('FORM SUBMITTED\n\nCongratulations! Your appointment is in the same place as your New Year\'s resolutions.\n(The void. It\'s a demo.)');
             return true;
         }
         
         // Annoying reminder
         setTimeout(() => {
-            alert('REMINDER\n\nPlease fill out the appointment form to book your visit.');
+            alert('REMINDER\n\nThis form has more fields than your attention span.\n\nBut filling it out is easier than explaining symptoms to Dr. Google.\n\nGood luck!');
         }, 10000);
         
         // Random motivational messages

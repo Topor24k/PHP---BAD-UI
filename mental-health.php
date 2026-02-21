@@ -478,7 +478,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mood'])) {
         // Gentle encouragement popup
         <?php if($mood): ?>
         setTimeout(() => {
-            alert('Thank you for checking in with yourself.\n\nAcknowledging your feelings is an important step in taking care of your mental health.\n\nYou\'re doing great!');
+            alert('MOOD LOGGED\n\nYou\'re taking time to check in with yourself. That\'s more self-awareness than most people scrolling social media at 2 AM.\n\nSeriously though: Your mental health matters. Keep checking in, and reach out if you need support.');
         }, 500);
         <?php endif; ?>
         

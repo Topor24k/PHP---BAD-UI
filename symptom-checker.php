@@ -394,17 +394,18 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
             
             if(checked > 8) {
-                if(!confirm('You selected ' + checked + ' symptoms.\n\nProceed with analysis?')) {
+                if(!confirm('You selected ' + checked + ' symptoms.\n\nAccording to WebMD, you have everything from a cold to imminent demise.\n\nProceed with our slightly-less-dramatic analysis?')) {
                     e.preventDefault();
                 }
             } else if(checked === 0) {
-                alert('No symptoms selected.\n\nIf you\'re feeling healthy, that\'s wonderful!');
+                alert('No symptoms selected.\n\nYou\'re either perfectly healthy or in denial.\n\nEither way, enjoy your functional existence!');
+                e.preventDefault();
             }
         });
         
         <?php if($diagnosis): ?>
         setTimeout(() => {
-            alert('ASSESSMENT COMPLETE\n\nRemember: This is for informational purposes only.\n\nConsult a healthcare professional for medical concerns.');
+            alert('ASSESSMENT COMPLETE\n\nOur advanced medical algorithm (random nonsense generator) has spoken.\n\nFor real medical advice: Close this tab and call an actual doctor.\n\nThey went to school for 8+ years for this.');
         }, 500);
         <?php endif; ?>
     </script>

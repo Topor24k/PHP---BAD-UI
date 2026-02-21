@@ -385,7 +385,7 @@ $username = $_SESSION['username'] ?? 'Guest';
     
     <script>
         function buyProduct(product) {
-            alert("PRODUCT ADDED TO CART\n\nYou selected: " + product + "!\n\nTotal: $" + (Math.random() * 1000).toFixed(2) + "\n\n(This is a demo - no actual purchase)");
+            alert("PRODUCT ADDED TO CART\n\nYou selected: " + product + "!\n\nTotal: $" + (Math.random() * 1000).toFixed(2) + "\n\nGood news: It's a demo, so your wallet survives another day.\nBad news: So does your ailment.");
         }
         
         function showEmergency() {
@@ -399,7 +399,7 @@ $username = $_SESSION['username'] ?? 'Guest';
         // Random alerts
         setTimeout(() => {
             if(Math.random() > 0.5) {
-                alert("HEALTH REMINDER\n\nRemember to stay hydrated and maintain a healthy lifestyle.\n\n(Click OK to continue)");
+                alert("HEALTH REMINDER\n\nDrink water! Your body is 60% water.\nRight now it's probably 60% coffee and regret.\n\nStay hydrated before your kidneys file a formal complaint.");
             }
         }, 10000);
         

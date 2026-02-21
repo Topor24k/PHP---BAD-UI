@@ -348,7 +348,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Annoying popup
         <?php if($bmi !== null): ?>
         setTimeout(() => {
-            alert('BMI CALCULATION COMPLETE\n\nYour result is displayed above.\n\nConsult a healthcare professional for personalized advice.');
+            alert('BMI CALCULATION COMPLETE\n\nNumbers don\'t define you... but your insurance company disagrees.\n\nSeriously though: BMI is just one metric. Talk to a real doctor for actual health advice.');
         }, 1000);
         <?php endif; ?>
         
