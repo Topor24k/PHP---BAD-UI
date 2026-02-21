@@ -20,12 +20,15 @@ $username = $_SESSION['username'] ?? 'Guest';
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
         }
         
         body {
             background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%23ff00ff" width="50" height="50"/><rect fill="%2300ffff" x="50" width="50" height="50"/><rect fill="%23ffff00" y="50" width="50" height="50"/><rect fill="%2300ff00" x="50" y="50" width="50" height="50"/></svg>');
             font-family: 'Comic Sans MS', 'Papyrus', cursive;
             color: #000;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><text y="15" font-size="20">💊</text></svg>'), auto;
         }
         
         @keyframes rotate {
@@ -101,11 +104,16 @@ $username = $_SESSION['username'] ?? 'Guest';
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s;
+            position: relative;
         }
         
         .nav-item:hover {
             animation: bounce 0.5s infinite;
-            transform: scale(1.2);
+            transform: scale(1.2) rotate(360deg);
+        }
+        
+        .nav-item:active {
+            transform: translateY(100px);
         }
         
         .nav-item:nth-child(1) { background: #ff6b6b; }
@@ -384,41 +392,204 @@ $username = $_SESSION['username'] ?? 'Guest';
     </marquee>
     
     <script>
+        // Disable right-click
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('copy', e => e.preventDefault());
+        document.addEventListener('paste', e => e.preventDefault());
+        
+        // Make buttons run away sometimes
+        document.querySelectorAll('.buy-btn').forEach((btn, index) => {
+            let hoverCount = 0;
+            btn.addEventListener('mouseenter', function() {
+                hoverCount++;
+                if(hoverCount <= 3) {
+                    this.style.position = 'fixed';
+                    this.style.top = Math.random() * 70 + 10 + 'vh';
+                    this.style.left = Math.random() * 70 + 10 + 'vw';
+                    this.style.zIndex = '1000';
+                } else {
+                    this.style.position = 'static';
+                    this.textContent = 'FINE! BUY IT!';
+                }
+            });
+        });
+        
         function buyProduct(product) {
-            alert("PRODUCT ADDED TO CART\n\nYou selected: " + product + "!\n\nTotal: $" + (Math.random() * 1000).toFixed(2) + "\n\nGood news: It's a demo, so your wallet survives another day.\nBad news: So does your ailment.");
+            if(!confirm("⚠️ CONFIRM PURCHASE ⚠️\n\nAre you ABSOLUTELY sure you want to buy " + product + "?\n\n(Remember: This is a demo. No actual purchase will be made)")) {
+                alert("Purchase cancelled!\n\nGood choice. Your wallet thanks you.");
+                return;
+            }
+            
+            if(!confirm("⚠️ FINAL CONFIRMATION ⚠️\n\nLast chance to back out!\n\nReally want " + product + "?")) {
+                alert("Smart decision! Cancelled.");
+                return;
+            }
+            
+            // Random fake price
+            const price = (Math.random() * 500 + 50).toFixed(2);
+            alert("💳 PROCESSING PAYMENT...\n\nProduct: " + product + "\nTotal: $" + price + "\n\nPlease wait...");
+            
+            setTimeout(() => {
+                if(Math.random() < 0.4) {
+                    alert("❌ PAYMENT FAILED!\n\nError Code: INSUFFICIENT_FUNDS_" + Math.floor(Math.random() * 9000 + 1000) + "\n\nJust kidding! This is a demo.\n\n(But imagine if it was real. Scary, right?)");
+                } else {
+                    alert("✅ ORDER SUCCESSFUL!\n\nProduct: " + product + "\nAmount Charged: $" + price + "\n\nDelivery: 6-8 weeks\n\n...In an alternate reality where this isn't a demo!");
+                    
+                    setTimeout(() => {
+                        alert("📧 SHIPPING UPDATE\n\nYour order has been:\n- Processed\n- Packaged\n- Lost in transit\n- Found again\n- Delivered to wrong address\n\n(All in the span of 3 seconds. Technology is amazing!)");
+                    }, 2000);
+                }
+            }, 1500);
         }
         
         function showEmergency() {
             document.getElementById('emergency-popup').style.display = 'block';
+            
+            setTimeout(() => {
+                alert("⚠️ HEALTH TIP ⚠️\n\nDid you know?\n\n- Your bones are wet right now\n- You can't breathe and swallow at the same time\n- You just tried that, didn't you?\n\nThe human body is fascinating and weird.");
+            }, 3000);
         }
         
         function closeEmergency() {
-            document.getElementById('emergency-popup').style.display = 'none';
+            if(confirm("Are you sure you want to close this important health information?\n\nIt could save your life!\n\n(It won't, but it sounds dramatic)")) {
+                document.getElementById('emergency-popup').style.display = 'none';
+            }
         }
         
-        // Random alerts
+        // Annoying welcome alert
         setTimeout(() => {
-            if(Math.random() > 0.5) {
-                alert("HEALTH REMINDER\n\nDrink water! Your body is 60% water.\nRight now it's probably 60% coffee and regret.\n\nStay hydrated before your kidneys file a formal complaint.");
+            alert("🎉 WELCOME TO HEALTHMART! 🎉\n\nYour one-stop shop for all your health needs!\n\n(And by 'needs' we mean 'things we'll try to sell you')");
+        }, 2000);
+        
+        setTimeout(() => {
+            if(confirm("📱 NOTIFICATION PERMISSION 📱\n\nHealthMart would like to send you notifications.\n\n(We'll send you one every 5 minutes. Sounds fun, right?)")) {
+                alert("✅ NOTIFICATIONS ENABLED!\n\nYou'll now receive:\n- Daily health tips\n- Hourly sale alerts\n- Constant product updates\n- Random motivational quotes\n- This was a bad decision alert");
+            } else {
+                alert("❌ NOTIFICATIONS BLOCKED\n\nYou've made a wise choice.\n\n...but we'll ask again in 5 minutes.");
             }
-        }, 10000);
+        }, 5000);
+        
+        // Random health tips that interrupt
+        const healthTips = [
+            "💡 HEALTH TIP: Drink water! Unless you're drowning. Then don't.",
+            "💡 TIP OF THE DAY: An apple a day keeps the doctor away. A doctor's bill a day keeps your savings away.",
+            "💡 WELLNESS FACT: Getting punched in the face burns 300 calories. (Don't try this)",
+            "💡 DID YOU KNOW: 'Stressed' spelled backwards is 'desserts'. Coincidence? We think not.",
+            "💡 HEALTH REMINDER: If you're reading this, you're alive! Congratulations!",
+        ];
+        
+        setInterval(() => {
+            if(Math.random() < 0.2) {
+                alert(healthTips[Math.floor(Math.random() * healthTips.length)]);
+            }
+        }, 15000);
+        
+        // Random page scrolling
+        setInterval(() => {
+            if(Math.random() < 0.15) {
+                window.scrollTo({
+                    top: Math.random() * document.body.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }
+        }, 12000);
         
         // Create random floating elements
         setInterval(() => {
-            const emojis = ['💊', '💉', '🏥', '⚕️', '🩺'];
+            const emojis = ['💊', '💉', '🏥', '⚕️', '🩺', '💊', '🧪', '🩹'];
             const emoji = emojis[Math.floor(Math.random() * emojis.length)];
             const element = document.createElement('div');
             element.style.position = 'fixed';
-            element.style.left = Math.random() * window.innerWidth + 'px';
+            element.style.left = Math.random() * 90 + 'vw';
             element.style.top = '-50px';
             element.style.fontSize = '40px';
             element.innerHTML = emoji;
-            element.style.animation = 'slide 5s linear';
+            element.style.transition = 'top 5s linear';
             element.style.pointerEvents = 'none';
+            element.style.zIndex = '500';
             document.body.appendChild(element);
             
-            setTimeout(() => element.remove(), 5000);
-        }, 3000);
+            setTimeout(() => {
+                element.style.top = '110vh';
+            }, 100);
+            
+            setTimeout(() => element.remove(), 5500);
+        }, 2000);
+        
+        // Flash random popups
+        function createSalePopup() {
+            const messages = [
+                "🔥 FLASH SALE! Everything must go!",
+                "💰 SPECIAL DISCOUNT! Click here!",
+                "⭐ NEW ARRIVAL! Check it out!",
+                "🎁 FREE GIFT with purchase!",
+                "⚡ LIMITED TIME OFFER!",
+                "🏆 YOU'RE OUR 1000000th VISITOR!"
+            ];
+            
+            const popup = document.createElement('div');
+            popup.style.cssText = 'position:fixed;background:#ff00ff;border:5px solid #ffff00;padding:20px;border-radius:15px;z-index:9999;box-shadow:0 0 30px rgba(0,0,0,0.8);font-size:18px;font-weight:bold;cursor:pointer;animation:shake 0.5s infinite;';
+            popup.style.top = Math.random() * 70 + 10 + 'vh';
+            popup.style.left = Math.random() * 70 + 10 + 'vw';
+            popup.innerHTML = messages[Math.floor(Math.random() * messages.length)];
+            popup.onclick = function() {
+                alert("🎉 CONGRATULATIONS! 🎉\n\nYou've won absolutely nothing!\n\nBut thanks for clicking!");
+                this.remove();
+            };
+            
+            document.body.appendChild(popup);
+            setTimeout(() => popup.remove(), 5000);
+        }
+        
+        setInterval(createSalePopup, 6000);
+        
+        // Random shake effect
+        setInterval(() => {
+            if(Math.random() < 0.1) {
+                document.body.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                }, 500);
+            }
+        }, 10000);
+        
+        // Fake loading screens
+        setTimeout(() => {
+            const loading = document.createElement('div');
+            loading.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:99999;display:flex;align-items:center;justify-content:center;color:white;font-size:30px;flex-direction:column;';
+            loading.innerHTML = '<div style="font-size:60px;">⏳</div><br>LOADING SPECIAL OFFERS...<br><br><div style="width:300px;height:30px;border:3px solid white;border-radius:15px;overflow:hidden;"><div id="progress-bar" style="width:0%;height:100%;background:linear-gradient(90deg,#ff0000,#00ff00,#0000ff);transition:width 0.1s;"></div></div>';
+            document.body.appendChild(loading);
+            
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                if(progress >= 100) {
+                    progress = 100;
+                    clearInterval(progressInterval);
+                    setTimeout(() => {
+                        loading.remove();
+                        alert("✅ LOADING COMPLETE!\n\nWow, that was pointless!\n\nThe page was already loaded. We just made you wait for fun!");
+                    }, 500);
+                }
+                document.getElementById('progress-bar').style.width = progress + '%';
+            }, 300);
+        }, 8000);
+        
+        // Cursor interference
+        const cursors = ['wait', 'not-allowed', 'grab', 'crosshair', 'move', 'progress'];
+        setInterval(() => {
+            if(Math.random() < 0.15) {
+                document.body.style.cursor = cursors[Math.floor(Math.random() * cursors.length)];
+                setTimeout(() => {
+                    document.body.style.cursor = '';
+                }, 3000);
+            }
+        }, 8000);
+        
+        // Logout warning
+        setTimeout(() => {
+            alert("⚠️ INACTIVITY WARNING ⚠️\n\nYou will be logged out in 30 seconds due to inactivity.\n\n(Just kidding. You literally just got here.)");
+        }, 20000);
     </script>
 </body>
 </html>
