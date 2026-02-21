@@ -1,14 +1,21 @@
 <?php
 session_start();
 
+// Randomly fail login 30% of the time just to frustrate users
+$randomFail = (rand(1, 10) <= 3);
+
 // Process login
 if(isset($_POST['action'])) {
     if($_POST['action'] === 'login') {
-        // Simple login logic (no database for demo)
-        $_SESSION['logged_in'] = true;
-        $_SESSION['username'] = $_POST['username'] ?? 'Guest User';
-        header('Location: index.php');
-        exit;
+        if($randomFail) {
+            $error = "ERROR: Server timeout. Please try again. (Error Code: " . rand(1000, 9999) . ")";
+        } else {
+            // Simple login logic (no database for demo)
+            $_SESSION['logged_in'] = true;
+            $_SESSION['username'] = $_POST['username'] ?? 'Guest User';
+            header('Location: index.php');
+            exit;
+        }
     } elseif($_POST['action'] === 'signup') {
         $_SESSION['logged_in'] = true;
         $_SESSION['username'] = $_POST['signup_username'] ?? 'New User';
@@ -28,6 +35,9 @@ if(isset($_POST['action'])) {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
         }
         
         body {
@@ -37,6 +47,7 @@ if(isset($_POST['action'])) {
             font-family: 'Comic Sans MS', cursive;
             overflow-x: hidden;
             position: relative;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><circle cx="10" cy="10" r="8" fill="red"/></svg>'), auto;
         }
         
         @keyframes gradientShift {
@@ -66,6 +77,11 @@ if(isset($_POST['action'])) {
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
         
         .container {
@@ -103,6 +119,7 @@ if(isset($_POST['action'])) {
             margin: 0 auto;
             box-shadow: 0 0 50px rgba(255, 0, 255, 0.8);
             position: relative;
+            animation: spin 20s linear infinite;
         }
         
         .warning-banner {
@@ -113,6 +130,16 @@ if(isset($_POST['action'])) {
             animation: blink 1.5s infinite;
             font-weight: bold;
             text-align: center;
+        }
+        
+        .error-message {
+            background: #ff0000;
+            color: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 3px solid #000;
+            font-weight: bold;
+            animation: shake 0.5s infinite;
         }
         
         .form-group {
@@ -145,7 +172,13 @@ if(isset($_POST['action'])) {
             color: #666666;
             cursor: pointer;
             border-radius: 3px;
-            float: right;
+            position: absolute;
+            right: 40px;
+            transition: all 0.2s;
+        }
+        
+        .small-login-btn:hover {
+            transform: translate(50px, -30px);
         }
         
         .small-signup-link {
@@ -240,30 +273,40 @@ if(isset($_POST['action'])) {
             <div class="blinking-text" style="animation-delay: 0.5s;">LOGIN NOW</div>
         </div>
         
-        <div class="login-container">
+        <div class="login-container" id="login-box">
             <div class="warning-banner">
-                WARNING: LOGGING IN REQUIRED
+                ⚠️ WARNING: LOGGING IN REQUIRED OR ELSE ⚠️
             </div>
             
-            <form method="POST" id="login-form">
+            <?php if(isset($error)): ?>
+            <div class="error-message"><?php echo $error; ?></div>
+            <?php endif; ?>
+            
+            <form method="POST" id="login-form" onsubmit="return validateLogin()">
                 <input type="hidden" name="action" value="login">
                 <div class="form-group">
-                    <label>USERNAME:</label>
-                    <input type="text" name="username" placeholder="Enter your username..." required>
+                    <label>USERNAME (NO SPECIAL CHARACTERS ALLOWED):</label>
+                    <input type="text" name="username" id="username" placeholder="Enter your username..." required autocomplete="off" onpaste="return false;" oncopy="return false;">
                 </div>
                 
                 <div class="form-group">
-                    <label>PASSWORD:</label>
-                    <input type="password" name="password" placeholder="Enter password..." required>
+                    <label>PASSWORD (MUST BE COMPLEX BUT WE WON'T TELL YOU HOW):</label>
+                    <input type="password" name="password" id="password" placeholder="Enter password..." required autocomplete="off" onpaste="return false;" oncopy="return false;">
                 </div>
                 
-                <button type="submit" class="small-login-btn" title="Good luck finding me!">login</button>
+                <div class="form-group">
+                    <label>CONFIRM YOU'RE NOT A ROBOT (Type "I am not a robot" exactly):</label>
+                    <input type="text" name="captcha" id="captcha" required autocomplete="off">
+                </div>
+                
+                <button type="submit" class="small-login-btn" id="login-btn" title="Try to click me!">login</button>
                 <br><br><br>
-                <a class="small-signup-link" onclick="showSignup()">sign up (click here if you can see this)</a>
+                <a class="small-signup-link" onclick="showSignup()" style="opacity: 0.3;">sign up (click here if you can see this)</a>
             </form>
             
             <button class="giant-forgot-btn" onclick="forgotPassword()">
-                I FORGOT MY PASSWORD
+                ★★★ I FORGOT MY PASSWORD ★★★<br>
+                (CLICK THIS HUGE BUTTON)
             </button>
         </div>
         
@@ -297,46 +340,169 @@ if(isset($_POST['action'])) {
     </marquee>
     
     <script>
+        // Disable right-click
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        
+        // Disable copy-paste (already in HTML but extra layer)
+        document.addEventListener('copy', e => e.preventDefault());
+        document.addEventListener('paste', e => e.preventDefault());
+        
         // Random pop-ups
         function createRandomPopup() {
             const messages = [
-                "SPECIAL OFFER!",
-                "HEALTH PRODUCTS",
-                "SALE NOW!",
-                "NEW ITEMS!",
-                "CLICK HERE!"
+                "🔥 SPECIAL OFFER! 50% OFF!",
+                "💊 HEALTH PRODUCTS ON SALE!",
+                "⚡ LIMITED TIME ONLY!",
+                "🎉 NEW ARRIVALS!",
+                "👆 CLICK HERE FOR DEALS!",
+                "⭐ TRENDING NOW!",
+                "🚀 SUBSCRIBE TO NEWSLETTER!"
             ];
             
             const popup = document.createElement('div');
             popup.className = 'random-popup';
-            popup.style.top = Math.random() * 80 + 'vh';
-            popup.style.left = Math.random() * 80 + 'vw';
+            popup.style.top = Math.random() * 70 + 10 + 'vh';
+            popup.style.left = Math.random() * 70 + 10 + 'vw';
             popup.innerHTML = messages[Math.floor(Math.random() * messages.length)];
-            popup.onclick = function() { this.remove(); };
+            popup.onclick = function() { 
+                alert("Thanks for clicking! But there's no actual deal. 😄");
+                this.remove(); 
+            };
             
             document.body.appendChild(popup);
             
-            setTimeout(() => popup.remove(), 3000);
+            setTimeout(() => popup.remove(), 4000);
         }
         
-        setInterval(createRandomPopup, 5000);
+        setInterval(createRandomPopup, 3000);
+        
+        // Make login button run away
+        let loginBtn = document.getElementById('login-btn');
+        let escapeCount = 0;
+        
+        loginBtn.addEventListener('mouseenter', function() {
+            escapeCount++;
+            if(escapeCount < 5) {
+                this.style.position = 'fixed';
+                this.style.top = Math.random() * 80 + 'vh';
+                this.style.left = Math.random() * 80 + 'vw';
+            } else {
+                this.style.position = 'relative';
+                this.style.top = 'auto';
+                this.style.left = 'auto';
+                this.textContent = 'FINE, CLICK ME';
+                this.style.fontSize = '16px';
+                this.style.padding = '10px 20px';
+                this.style.background = '#00ff00';
+            }
+        });
+        
+        // Random alerts
+        setTimeout(() => {
+            alert("⚠️ WELCOME TO HEALTHMART ⚠️\n\nImportant Notice:\n\nBy using this website, you agree to receive 47 emails per day about health tips you didn't ask for.\n\nClick OK to continue...");
+        }, 1500);
+        
+        setTimeout(() => {
+            if(confirm("🎉 SPECIAL PROMOTION! 🎉\n\nWould you like to hear about our extended warranty for your health?\n\n(Clicking either button does nothing)")) {
+                alert("Great! We'll spam your inbox starting now! 📧");
+            } else {
+                alert("Too bad! We'll spam you anyway! 📧");
+            }
+        }, 5000);
+        
+        // Randomly clear form fields
+        setInterval(() => {
+            if(Math.random() < 0.1) {
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                alert("⚠️ SESSION TIMEOUT ⚠️\n\nFor your security, we've cleared your login form.\n\n(It's been like 10 seconds but whatever)");
+            }
+        }, 15000);
+        
+        // Validation function
+        function validateLogin() {
+            const captcha = document.getElementById('captcha').value;
+            if(captcha !== "I am not a robot") {
+                alert("❌ CAPTCHA FAILED!\n\nYou must type EXACTLY: 'I am not a robot'\n\nCase sensitive. No extra spaces. No mistakes.\n\nTry again!");
+                return false;
+            }
+            
+            // Random fake errors
+            if(Math.random() < 0.3) {
+                alert("⚠️ SYSTEM ERROR ⚠️\n\nError Code: " + Math.floor(Math.random() * 9000 + 1000) + "\n\nPlease try again in a few moments.\n\n(Translation: Just click login again)");
+                return false;
+            }
+            
+            // Fake loading screen
+            const loadingDiv = document.createElement('div');
+            loadingDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;color:white;font-size:24px;';
+            loadingDiv.innerHTML = '<div style="animation: spin 2s linear infinite;">⏳</div><br>PROCESSING YOUR LOGIN...<br><br>This may take several seconds...<br><br>(Actually it\'s instant but we want you to wait)';
+            document.body.appendChild(loadingDiv);
+            
+            setTimeout(() => {
+                loadingDiv.remove();
+            }, 3000);
+            
+            setTimeout(() => {
+                document.getElementById('login-form').submit();
+            }, 3100);
+            
+            return false; // Prevent immediate submission
+        }
         
         function forgotPassword() {
-            alert("PASSWORD RECOVERY\n\nYour password is probably 'password123' or your birthday.\n\nStatistically, you're as predictable as a horror movie victim.\n\n(But seriously, contact support or use any password for demo)");
+            alert("🔐 PASSWORD RECOVERY 🔐\n\nStep 1: Try to remember it\nStep 2: Try your birthday\nStep 3: Try 'password123'\nStep 4: Give up\n\n(For demo purposes, any password works)");
+            alert("📧 Email Sent!\n\nWe've sent a password reset link to an email address we don't actually have.\n\nPlease check your spam folder, your trash, and possibly your neighbor's mailbox.");
+            alert("⚠️ SECURITY NOTICE ⚠️\n\nFor your protection, we've:\n- Locked your account\n- Notified the FBI\n- Called your mom\n- Ordered you a pizza\n\nJust kidding. Just use any password for this demo.");
         }
         
         function showSignup() {
-            document.getElementById('signup-modal').style.display = 'block';
+            if(confirm("⚠️ Are you ABSOLUTELY SURE you want to sign up?\n\nThis is a very serious decision that will haunt you forever.")) {
+                if(confirm("⚠️ Are you REALLY REALLY sure?\n\nLike, 100% sure?")) {
+                    if(confirm("⚠️ Last chance to back out...\n\nNo? Okay then...")) {
+                        document.getElementById('signup-modal').style.display = 'block';
+                    }
+                }
+            }
         }
         
         function closeSignup() {
-            document.getElementById('signup-modal').style.display = 'none';
+            if(confirm("Are you sure you want to close this? You'll have to go through all those confirmations again!")) {
+                document.getElementById('signup-modal').style.display = 'none';
+            }
         }
         
-        // Annoying alert on page load
-        setTimeout(() => {
-            alert("WELCOME TO HEALTHMART\n\nClick OK to continue.");
-        }, 1000);
+        // Shake the whole page randomly
+        setInterval(() => {
+            if(Math.random() < 0.15) {
+                document.body.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                }, 500);
+            }
+        }, 8000);
+        
+        // Random cursor changes
+        const cursors = ['wait', 'not-allowed', 'grab', 'grabbing', 'crosshair', 'move'];
+        setInterval(() => {
+            if(Math.random() < 0.2) {
+                document.body.style.cursor = cursors[Math.floor(Math.random() * cursors.length)];
+                setTimeout(() => {
+                    document.body.style.cursor = 'default';
+                }, 2000);
+            }
+        }, 7000);
+        
+        // Make login box spin occasionally
+        setInterval(() => {
+            const loginBox = document.getElementById('login-box');
+            if(Math.random() < 0.1) {
+                loginBox.style.animation = 'spin 2s linear 1';
+                setTimeout(() => {
+                    loginBox.style.animation = 'spin 20s linear infinite';
+                }, 2000);
+            }
+        }, 10000);
     </script>
 </body>
 </html>
