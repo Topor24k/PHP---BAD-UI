@@ -35,13 +35,60 @@ A deliberately chaotic healthcare web application with intentionally poor user i
 19. **Input Sanitization** - Minimal protection against XSS and malicious inputs
 20. **Backup System** - No data backup or recovery mechanisms
 
-## How to Run
+## Requirements
 
-1. Install XAMPP or any PHP server
-2. Navigate to project directory
-3. Run: `php -S localhost:8000`
-4. Open browser: `http://localhost:8000/login.php`
-5. Login with any username/password (no validation)
+To run this project on any laptop, you need:
+
+- **PHP 7.0 or higher** (PHP 8.x recommended)
+- **Any modern web browser** (Chrome, Firefox, Edge, Safari)
+- **No database required** - all data is session-based
+- **No additional dependencies** - pure PHP, no composer packages needed
+
+## Installation & Setup
+
+### Option 1: Using Built-in PHP Server (Recommended)
+
+1. **Install PHP** (if not already installed):
+   - **Windows**: Download from [php.net](https://www.php.net/downloads) or install via [XAMPP](https://www.apachefriends.org/)
+   - **Mac**: PHP comes pre-installed, or use `brew install php`
+   - **Linux**: `sudo apt install php` (Ubuntu/Debian) or `sudo yum install php` (CentOS/RHEL)
+
+2. **Verify PHP installation**:
+   ```bash
+   php -v
+   ```
+
+3. **Clone or download this repository**:
+   ```bash
+   git clone <repository-url>
+   cd "HealthMart Bad UI"
+   ```
+
+4. **Start the PHP development server**:
+   ```bash
+   & 'C:\xampp\php\php.exe' -v
+   & 'C:\xampp\php\php.exe' -S localhost:8000v
+   ```
+
+5. **Open your browser** and navigate to:
+   ```
+   http://localhost:8000/login.php
+   ```
+
+6. **Login** with any username/password (no validation - part of the "bad UI" experience!)
+
+### Option 2: Using XAMPP/WAMP/MAMP
+
+1. Install [XAMPP](https://www.apachefriends.org/), WAMP, or MAMP
+2. Copy project folder to `htdocs` (XAMPP) or `www` (WAMP) directory
+3. Start Apache server from control panel
+4. Navigate to `http://localhost/HealthMart%20Bad%20UI/login.php`
+
+## Troubleshooting
+
+- **"php: command not found"**: PHP is not installed or not in your system PATH
+- **Port 8000 already in use**: Try a different port: `php -S localhost:3000`
+- **Session errors**: Ensure PHP sessions are enabled (enabled by default)
 
 ## Note
 This project intentionally features bad UI design patterns including:
