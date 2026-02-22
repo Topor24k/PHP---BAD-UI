@@ -58,6 +58,10 @@ class UserCntrl extends Users {
         $_SESSION["USER_NAME"] = $user["NAME"];
         $_SESSION["USER_EMAIL"] = $user["EMAIL"];
 
+        // Backwards-compatible flags used by other pages
+        $_SESSION['logged_in'] = true;
+        $_SESSION['username'] = $user["NAME"];
+
         return true;
     }
 
