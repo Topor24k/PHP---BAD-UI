@@ -75,13 +75,23 @@ $username = $_SESSION['username'] ?? 'Guest';
             position: absolute;
             top: 10px;
             right: 10px;
-            background: #ff00ff;
-            padding: 10px;
-            border: 3px solid #ffff00;
-            border-radius: 10px;
-            font-size: 18px;
-            animation: rotate 3s linear infinite;
+            background: linear-gradient(45deg, #ff00ff, #ff0000);
+            padding: 14px 18px;
+            border: 6px dashed #ffff00;
+            border-radius: 14px;
+            font-size: 22px;
+            animation: rotate 1.5s linear infinite, blink 0.8s steps(2) infinite;
+            text-decoration: none;
+            color: #000;
+            box-shadow: 0 0 30px rgba(255,0,255,0.8), inset 0 0 20px rgba(255,255,0,0.6);
+            transform-origin: center;
+            z-index: 2000;
+            cursor: pointer;
         }
+
+        #username-logout-link strong { text-decoration: underline; color: #000; }
+
+        #username-logout-link:hover { transform: scale(1.4) rotate(-20deg); filter: hue-rotate(90deg); }
         
         .navigation {
             background: #ffff00;
@@ -280,9 +290,9 @@ $username = $_SESSION['username'] ?? 'Guest';
     </style>
 </head>
 <body>
-    <div class="username-display">
-        👤 <?php echo htmlspecialchars($username); ?>
-    </div>
+    <a href="logout.php" class="username-display" id="username-logout-link" title="Click to log out immediately">
+        👤 <strong><?php echo htmlspecialchars($username); ?></strong>
+    </a>
     
     <div class="header">
         <h1>HEALTHMART</h1>
